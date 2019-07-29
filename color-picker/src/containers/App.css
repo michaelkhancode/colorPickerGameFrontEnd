@@ -1,0 +1,13 @@
+
+.container {
+    justify-content: center;
+}
+
+.flexBox {
+    display: flex;
+}
+
+.gridDifficultyTarget {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+}
