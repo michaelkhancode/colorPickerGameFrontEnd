@@ -3,7 +3,7 @@ import Box from '../Box/Box';
 import Container from '@material-ui/core/Container';
 import  './Boxlist.css';
 
-const Boxlist = ({ difficulty }) => {
+const Boxlist = ({ difficulty, boxColors }) => {
     const boxlist           = [];
     const gridWrapper = {
         display:"grid",
@@ -11,7 +11,7 @@ const Boxlist = ({ difficulty }) => {
     }
 
     for (var index = 0; index < difficulty; index++) {
-        boxlist.push( <Box key={index} ind={index} /> )
+        boxlist.push( <Box key={index} ind={index} RGBColor={boxColors[index]} /> )
     }
 
     return (

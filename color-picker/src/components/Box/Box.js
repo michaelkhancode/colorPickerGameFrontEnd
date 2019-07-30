@@ -3,11 +3,11 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import "./Box.css"
 
-const Box = ({ind}) => {
+const Box = ({ind, RGBColor}) => {
 
     const boxColor = {
         color:"pink",
-        backgroundColor:"green"
+        backgroundColor:RGBColor
     }
 
     const useStyles = makeStyles(theme => ({

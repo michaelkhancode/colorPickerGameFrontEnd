@@ -18,32 +18,43 @@ class App extends React.Component {
     super(props);
     this.state = {
         difficulty: 3,
-        targetColor: rgbString()
+        targetColor: "Select A Difficulty",
+        boxColors: ["rgb(167,254,17)","rgb(167,254,17)","rgb(167,254,17)"]
       }
   };
 
   changeDifficulty = (difficulty) => {
-    this.setState( {difficulty} )
+    // this.setState({difficulty}, () => {
+    //   this.resetColors()
+    // })
+
+    this.setState(
+      (state) => {return {difficulty, targetColor:rgbString()}},
+      this.resetColors
+    )
   }
 
-  generateBoxColors = () => {
+  // componentDidUpdate(prevProps, prevState, snapshot) {
+  //   console.log("componentDidUpdate")
+  //   console.log("prevState", prevState);
+  // }
+
+  resetColors = () => {
     const { difficulty, targetColor }  = this.state ;
-    let boxColorObject  = [];
+    let boxColors       = [];
     let targetBoxIndex  = Math.round( Math.random()*(difficulty-1) )
     for (var index = 0; index < difficulty; index++) {
-      console.log(index,targetBoxIndex)
       targetBoxIndex === index 
       ? 
-      boxColorObject.push( targetColor )
+      boxColors.push( targetColor )
       :
-      boxColorObject.push( rgbString() ) 
+      boxColors.push( rgbString() ) 
     }
-    return boxColorObject;
+    this.setState({ boxColors });
   }
 
   render (){
-    const { difficulty, targetColor } = this.state;
-    console.log ( this.generateBoxColors() )
+    const { difficulty, targetColor, boxColors } = this.state;
     return (
       <div>
         <Container className="container" maxWidth="lg" >
@@ -57,7 +68,7 @@ class App extends React.Component {
             <Difficulty changeDifficulty = { this.changeDifficulty } />
             <TargetColor targetColor = { targetColor } />
           </div>
-          <Boxlist difficulty = { difficulty }  />
+          <Boxlist difficulty = { difficulty } boxColors = { boxColors } />
         </Container>
       </div>
     )
