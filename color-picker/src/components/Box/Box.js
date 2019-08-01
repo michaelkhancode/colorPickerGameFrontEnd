@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import "./Box.css"
 
-const Box = ({ind, RGBColor}) => {
+const Box = ({ind, RGBColor, target}) => {
 
     const boxColor = {
         color:"pink",
@@ -25,7 +25,7 @@ const Box = ({ind, RGBColor}) => {
             variant="outlined" 
             className={classes.button}
             >
-                {`Im a Box ${ind}`}
+                {`Im a Box ${ind} and im ${target}`}
             </Button>
         </div>
     )

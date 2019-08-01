@@ -5,6 +5,7 @@ import Score from '../components/Score/Score';
 import Difficulty from '../components/Difficulty/Difficulty';
 import User from '../components/User/User';
 import TargetColor from '../components/TargetColor/TargetColor';
+import RightOrWrongBox from '../components/RightOrWrongBox/RightOrWrongBox';
 import "./App.css"
 import Container from '@material-ui/core/Container';
 
@@ -19,42 +20,42 @@ class App extends React.Component {
     this.state = {
         difficulty: 3,
         targetColor: "Select A Difficulty",
-        boxColors: ["rgb(167,254,17)","rgb(167,254,17)","rgb(167,254,17)"]
+        boxColors: [{color:"rgb(167,254,17)", target:false},{color:"rgb(167,254,17)", target:false},{color:"rgb(167,254,17)", target:false}]
       }
   };
 
   changeDifficulty = (difficulty) => {
-    // this.setState({difficulty}, () => {
-    //   this.resetColors()
-    // })
-
+    console.log("changeDifficulty")
     this.setState(
-      (state) => {return {difficulty, targetColor:rgbString()}},
+      (state) => {
+        return {difficulty, targetColor:rgbString()}
+      },
       this.resetColors
     )
   }
 
-  // componentDidUpdate(prevProps, prevState, snapshot) {
-  //   console.log("componentDidUpdate")
-  //   console.log("prevState", prevState);
-  // }
+  correctChoice = () => {
+
+  }
 
   resetColors = () => {
-    const { difficulty, targetColor }  = this.state ;
+    console.log("resetColors")
+    const { difficulty, targetColor }  = this.state;
     let boxColors       = [];
     let targetBoxIndex  = Math.round( Math.random()*(difficulty-1) )
     for (var index = 0; index < difficulty; index++) {
       targetBoxIndex === index 
       ? 
-      boxColors.push( targetColor )
+      boxColors.push( {color:targetColor, target:true} )
       :
-      boxColors.push( rgbString() ) 
+      boxColors.push( {color:rgbString(), target:false} ) 
     }
-    this.setState({ boxColors });
+    this.setState((state) => {return {boxColors}});
   }
 
   render (){
-    const { difficulty, targetColor, boxColors } = this.state;
+    console.log("render")
+    const { targetColor, boxColors } = this.state;
     return (
       <div>
         <Container className="container" maxWidth="lg" >
@@ -68,7 +69,9 @@ class App extends React.Component {
             <Difficulty changeDifficulty = { this.changeDifficulty } />
             <TargetColor targetColor = { targetColor } />
           </div>
-          <Boxlist difficulty = { difficulty } boxColors = { boxColors } />
+          <Boxlist boxColors = { boxColors } />
+          <RightOrWrongBox />
+          <svg className="test" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-check-circle"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
         </Container>
       </div>
     )
