@@ -11,3 +11,18 @@
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
 }
+
+.timerAndRightOrWrong {
+    display: grid;
+    grid-template-rows: 1fr 1fr 1fr;
+}
+
+.timerRightOrWrongFlexWrapper, .boxlistFlexWrapper {
+    flex: 1;
+}
+
+.timerAndRightOrWrongGridWrapper {
+    width: 250px;
+    margin: auto;
+}
+

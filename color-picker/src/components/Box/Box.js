@@ -1,13 +1,13 @@
 import React from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
-import "./Box.css"
 
-const Box = ({ind, RGBColor, target}) => {
+const Box = ({ind, RGBColor, target, clickHandler}) => {
 
-    const boxColor = {
-        color:"pink",
-        backgroundColor:RGBColor
+    const boxSytles = {
+        height:"100px",
+        width: "170px",
+        backgroundColor:RGBColor,
     }
 
     const useStyles = makeStyles(theme => ({
@@ -21,14 +21,14 @@ const Box = ({ind, RGBColor, target}) => {
     return (
         <div>
             <Button
-            style={boxColor} 
+            style={boxSytles} 
             variant="outlined" 
             className={classes.button}
+            onClick={() => clickHandler(target, RGBColor)}
             >
-                {`Im a Box ${ind} and im ${target}`}
             </Button>
         </div>
     )
 }
 
-export default Box;
+export default Box; 

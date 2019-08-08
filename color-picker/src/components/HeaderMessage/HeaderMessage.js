@@ -10,7 +10,7 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const TargetColor = ({ targetColor }) => {
+const HeaderMessage = ({ headerMessage }) => {
     const classes = useStyles();
 
     return (
@@ -18,7 +18,7 @@ const TargetColor = ({ targetColor }) => {
             <Tilt className="Tilt" options={{ max : 25 }} >
                 <Paper style={{justifyContent:"center"}} className={classes.root}>
                     <Typography variant="h5" component="h1">
-                        { `${targetColor.toUpperCase()}` }
+                        { `${headerMessage.toUpperCase()}` }
                     </Typography>
                 </Paper>
             </Tilt>
@@ -26,6 +26,6 @@ const TargetColor = ({ targetColor }) => {
     );
 }
 
-export default TargetColor;
+export default HeaderMessage;
  
 
