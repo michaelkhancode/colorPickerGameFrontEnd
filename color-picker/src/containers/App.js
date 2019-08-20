@@ -10,10 +10,12 @@ import Timer from '../components/Timer/Timer';
 import "./App.css"
 import Container from '@material-ui/core/Container';
 
-
 const rgbString = () => {
   return `rgb(${Math.round(Math.random()*255)},${Math.round(Math.random()*255)},${Math.round(Math.random()*255)})`
 };
+
+const intialBoxColor = rgbString();
+const intialBoxColorObject = {color:intialBoxColor, target:false}
 
 class App extends React.Component {
 
@@ -22,81 +24,151 @@ class App extends React.Component {
     this.state = {
         difficulty: 3,
         headerMessage: "Select A Difficulty",
-        boxColors: [{color:"rgb(167,254,17)", target:false},{color:"rgb(167,254,17)", target:false},{color:"rgb(167,254,17)", target:false}],
+        boxColors: new Array(3).fill({ color:rgbString(), target:false }),
         targetColor: null,
         targetChoice: null,
-        gameStage: "blank"
+        round:        1,
+        gameStage: "blank"   // blank, difficultySelectedPreStart, liveSession, roundVictory, gameVictory
       }
   };
 
+  // make all thee callbacks to setState call appRouter, and app router will work off of gameStage
+
+  appRouter = () => {
+    switch(this.state.gameStage) {
+      case ("difficultySelectedPreStart"):
+        console.log("difficultySelectedPreStart")
+        this.anyColorYouLike(rgbString())
+        this.setState({ round:1 })
+        break;
+      case "liveSession":
+        console.log("liveSession")
+        this.setState({headerMessage:this.state.targetColor})
+        this.resetColors()
+      break;
+      case "roundVictory":
+        console.log("roundVictory")
+        this.miniReset()
+        break;
+      case "gameVictory":
+        console.log("gameVictory")
+        this.vicotryColors()
+        console.log(this.state)
+        break;
+      default:
+    }
+  }
+
   changeDifficulty = (difficulty) => {
+    if (this.state.gameStage === "difficultySelectedPreStart" ||
+        this.state.gameStage === "blank") {
+      this.setState(
+        (state) => {
+          return {difficulty, headerMessage:"press start", gameStage:"difficultySelectedPreStart" }
+        }, this.appRouter
+      )
+    }
+  }
+
+  roundReset = () => {
     this.setState(
       (state) => {
-        return {difficulty, targetColor:rgbString(), headerMessage:"press start", gameStage:"difficultySelectedPreStart" }
-      },this.generateColors
+        return {targetColor:rgbString(),}
+      },this.resetColors
     )
   }
 
   startTimer = () => {
-    console.log(this.state.targetColor)
     this.setState(
       (state) => {
-        return {headerMessage:this.state.targetColor, gameStage:"liveSession" }
-      }
+        return {gameStage:"liveSession"}
+      },() => { this.resetTargetColor(this.appRouter) }
+    )
+  }
+
+  resetTimer = () => {
+    this.setState(
+      (state) => {
+        return {headerMessage:"press start", gameStage:"difficultySelectedPreStart" }
+      }, this.appRouter
     )
   }
 
   clickHandler = (target, RGBColor) => {
-    this.setState(
-      (state) => {
-        return { targetChoice:target }
-      },() => {
-        target ? this.correctChoice(RGBColor) : this.incorrectChoice(RGBColor)
-      } 
-    )
+    if (target) {
+      if (this.state.round < 5) {
+        this.setState(
+          (prevState) => {
+            return { targetChoice:target, gameStage:"roundVictory", round: prevState.round + 1 }
+          }, this.appRouter
+        )
+      } else {
+          this.setState(
+            (prevState) => {
+              return { targetChoice:target, gameStage:"gameVictory", round: prevState.round + 1 }
+            }, this.appRouter
+          )
+        }
+    }
   }
 
-  reportTime = (timerTime) => {
-    console.log(timerTime)
+  reportTime = (gameVictoryTime) => {
+    alert(`${gameVictoryTime.hours} : ${gameVictoryTime.minutes} : ${gameVictoryTime.seconds} : ${gameVictoryTime.centiseconds}`)
   }
 
-  correctChoice = (RGBColor) => {
-    this.setState ( 
-      (state) => {
-        return {gameStage:"victory"}
-      },() =>{
-        this.generateColors("v")  
-      }
-    )
+  resetTargetColor = (callback) => {
+    if (callback) {
+      this.setState ( 
+        (state) => {
+          return {targetColor:rgbString()}
+        }, callback
+      ) 
+    } else {
+      this.setState ( 
+        (state) => {return {targetColor:rgbString()}} 
+      )
+    }
   }
-
-  incorrectChoice = (RGBColor) => {
-  }
-
-  generateColors = (v) => {
-    const { difficulty, targetColor }  = this.state;
-    let boxColors       = [];
-    let targetBoxIndex  = Math.round( Math.random()*(difficulty-1) )
-
-    const vicotryColors = () => {
-      for (var index = 0; index < difficulty; index++) { 
-        boxColors.push( {color:targetColor, target:false} ) 
+    
+  anyColorYouLike = (RGBString) => {
+      let boxColors       = [];
+      for (var index = 0; index < this.state.difficulty; index++) { 
+        boxColors.push( {color:RGBString, target:false} ) 
       }
       this.setState((state) => {return {boxColors}});
     }
 
-    const resetColors = () => {
-      for (var index = 0; index < difficulty; index++) {
-        targetBoxIndex === index 
-        ? 
-        boxColors.push( {color:targetColor, target:true} )
-        :
-        boxColors.push( {color:rgbString(), target:false} ) 
-      }
-      this.setState((state) => {return {boxColors, targetChoice:null}});
+  vicotryColors = () => {
+    let boxColors       = [];
+    for (var index = 0; index < this.state.difficulty; index++) { 
+      boxColors.push( {color:this.state.targetColor, target:false} ) 
     }
+    this.setState((state) => {return {boxColors}});
+  }
 
-    v === "v" ? vicotryColors() : resetColors()
+  resetColors = () => {
+    let boxColors       = [];
+    let targetBoxIndex  = Math.round( Math.random()*(this.state.difficulty-1) )
+    for (var index = 0; index < this.state.difficulty; index++) {
+      targetBoxIndex === index 
+      ? 
+      boxColors.push( {color:this.state.targetColor, target:true} )
+      :
+      boxColors.push( {color:rgbString(), target:false} ) 
+    }
+    this.setState((state) => {return {boxColors, targetChoice:null, headerMessage:this.state.targetColor}});
+  }
+
+  miniReset = (flag) => {
+    if (!flag) {
+      this.vicotryColors()
+      setTimeout( 
+        () => { 
+          this.miniReset(true) 
+        }, 1000 )
+      return;
+    }
+    this.resetTargetColor(this.resetColors)
   }
 
   render (){
@@ -120,7 +192,7 @@ class App extends React.Component {
             </div>
             <div className="timerRightOrWrongFlexWrapper">
               <div  className="timerAndRightOrWrongGridWrapper">
-                <div ><Timer startTimer={this.startTimer} reportTime={this.reportTime} gameStage={ this.state.gameStage } /></div>
+                <div ><Timer resetTimer={this.resetTimer} startTimer={this.startTimer} reportTime={this.reportTime} gameStage={ this.state.gameStage } /></div>
                 <div style={{width:"80px", margin:"auto"}}><RightOrWrongBox targetChoice= {targetChoice} /></div>
               </div>
             </div>

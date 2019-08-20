@@ -13,7 +13,7 @@ class Timer extends React.Component  {
       <div className="Timer">
         <Paper elevation={5} square>
             <Typography align="center" variant="h5" component="h3">
-              <Stopwatch startTimer={this.props.startTimer} reportTime={this.props.reportTime} gameStage={this.props.gameStage} />
+              <Stopwatch startTimer={this.props.startTimer} resetTimer={this.props.resetTimer} reportTime={this.props.reportTime} gameStage={this.props.gameStage} />
             </Typography>
         </Paper>
       </div>
