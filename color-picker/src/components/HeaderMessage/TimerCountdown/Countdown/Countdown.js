@@ -20,6 +20,7 @@ class Countdown extends Component {
           timerTime: this.state.timerTime,
           timerStart: this.state.timerTime
         });
+
         this.timer = setInterval(() => {
           const newTime = this.state.timerTime - 10;
           if (newTime >= 0) {
@@ -27,45 +28,29 @@ class Countdown extends Component {
               timerTime: newTime
             });
           } else {
-            clearInterval(this.timer);
             this.setState({ timerOn: false, timerTime: 5000 });
-            alert("Countdown ended");
+            this.props.changeGameStage("countDownEnd")
+            clearInterval(this.timer);
           }
         }, 10);
       };
 
-    stopTimer = () => {
-      clearInterval(this.timer);
-      this.setState({ timerOn: false });
-    };
-
-    resetTimer = () => {
-      if (this.state.timerOn === false) {
-        this.setState({
-          timerTime: this.state.timerStart
-        });
-      }
-    };
+      componentDidUpdate(props, state) {
+        if (this.props.gameStage === "countDownStart") {
+            this.startTimer()
+            this.props.changeGameStage("countDownMid")
+        }
+    }
 
     render() {
         const { timerTime, timerStart, timerOn } = this.state;
         let seconds = (""+(Math.floor((timerTime / 1000) % 60) % 60)).slice(-2);
-        // let minutes = ("0" + Math.floor((timerTime / 60000) % 60)).slice(-2);
-        // let hours = ("0" + Math.floor((timerTime / 3600000) % 60)).slice(-2);
 
         return (
         <div>
             <div className="Countdown">
                 {seconds}
             </div>
-            <Button 
-            style={{backgroundColor:"rgb(65, 209, 8)", color:"white" }} 
-            variant="outlined" 
-            size="small" 
-            onClick={this.startTimer}
-            >
-                    Start
-            </Button>
         </div>
         );
     }

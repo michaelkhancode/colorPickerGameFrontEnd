@@ -11,16 +11,27 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const HeaderMessage = ({ headerMessage, gameStage }) => {
+const HeaderMessage = ({ changeGameStage, headerMessage, gameStage }) => {
     const classes = useStyles();
+
+
+// let x;
+// if (gameStage === "countDownStart" || 
+//     gameStage === "countDownMid") {
+//     x = <TimerCountdown changeGameStage={ changeGameStage }  gameStage={ gameStage } />
+// } else {
+//      x = <span> { `${headerMessage.toUpperCase()}` } </span>
+// }
 
     return (
         <div style={{margin:"auto"}}>
             <Tilt className="Tilt" options={{ max : 25 }} >
                 <Paper style={{justifyContent:"center"}} className={classes.root}>
                     <Typography variant="h5" component="h1">
-                        {/* <TimerCountdown  /> */}
-                        { `${headerMessage.toUpperCase()}` }
+                        
+                        {/* {x} */}
+                        <span> { `${headerMessage.toUpperCase()}` }</span>
+
                     </Typography>
                 </Paper>
             </Tilt>

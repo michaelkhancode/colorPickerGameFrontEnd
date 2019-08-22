@@ -29,7 +29,7 @@ class App extends React.Component {
         targetColor: null,
         targetChoice: null,
         round:        1,
-        gameStage: "blank"   // blank, difficultySelectedPreStart, liveSession, roundVictory, gameVictory
+        gameStage: "blank"   // blank, difficultySelectedPreStart, countDownStart, countDownMid, countDownEnd, liveSession, roundVictory, gameVictory
       }
   };
 
@@ -42,6 +42,10 @@ class App extends React.Component {
         this.anyColorYouLike(rgbString())
         this.setState({ round:1 })
         break;
+      // case ("countDownStart"):
+      //     console.log("countDownStart")
+      //     this.setState({ round:1 })
+      //     break;
       case "liveSession":
         console.log("liveSession")
         this.setState({headerMessage:this.state.targetColor})
@@ -57,6 +61,10 @@ class App extends React.Component {
         break;
       default:
     }
+  }
+
+  changeGameStage = (gameStage) => {
+    this.setState( {gameStage} )
   }
 
   changeDifficulty = (difficulty) => {
@@ -78,12 +86,31 @@ class App extends React.Component {
     )
   }
 
-  startTimer = () => {
-    this.setState(
-      (state) => {
-        return {gameStage:"liveSession"}
-      },() => { this.resetTargetColor(this.appRouter) }
-    )
+  startStopwatch = () => {
+
+    if  (this.state.round === 1 &&
+        (this.state.gameStage === "difficultySelectedPreStart" || this.state.gameStage === "blank" )) {
+          this.setState(
+            (state) => {
+              return {gameStage:"countDownStart"}
+            }
+          )
+    }
+
+    if (this.state.gameStage === "countDownEnd") {
+      console.log("ran")
+      this.setState(
+        (state) => {
+          return {gameStage:"liveSession"}
+        },() => { this.resetTargetColor(this.appRouter) }
+      )
+    }
+  }
+
+  countDownStartToCountDownMid = () => {
+    if (this.state.gameStage === "countDownStart") {
+      this.setState({gameStage:"countDownMid"}) 
+    }
   }
 
   resetTimer = () => {
@@ -202,10 +229,13 @@ class App extends React.Component {
             </div>
             <div className="timerRightOrWrongFlexWrapper">
               <div  className="timerAndRightOrWrongGridWrapper">
-                <div ><TimerStopwatch resetTimer={this.resetTimer} startTimer={this.startTimer} reportTime={this.reportTime} gameStage={ this.state.gameStage } /></div>
+                <div ><TimerStopwatch resetTimer={this.resetTimer} changeGameStage={ this.changeGameStage } startStopwatch={this.startStopwatch} reportTime={this.reportTime} gameStage={ this.state.gameStage } /></div>
                 <div style={{width:"80px", margin:"auto"}}><RightOrWrongBox targetChoice= {targetChoice} /></div>
               </div>
             </div>
+          </div>
+          <div>
+            <TimerCountdown startStopwatch={ this.startStopwatch } changeGameStage={ this.changeGameStage } gameStage={ this.state.gameStage } />
           </div>
           </Container>
       </div>

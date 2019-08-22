@@ -11,10 +11,15 @@ class Stopwatch extends React.Component {
         };
     }
 
-    startTimer = () => {                                        //start the timer
-        if (this.props.gameStage != "liveSession") {
+    startStopwatch = () => {                                        //start the timer
+        if (this.props.gameStage === "difficultySelectedPreStart" || this.props.gameStage === "blank") {
+            this.props.startStopwatch()
+        }
+
+        if (this.props.gameStage === "countDownEnd") {
+            console.log(this.props.gameStage)
             const { timerTime } = this.state
-            this.props.startTimer()
+            this.props.startStopwatch()
             this.setState({                                         
                 timerOn:true,                                      //flagged to true, as timer has been started
                 timerStart: Date.now() - this.state.timerTime,     //if started fresh, subtracting from Date.now() makes no difference, if pausesd, and restarted new baseline is calculated
@@ -26,7 +31,7 @@ class Stopwatch extends React.Component {
                     timerTime: Date.now() - this.state.timerStart  //difference in starting time and current time gives elapsed time
                 });
             }, 10)
-            }
+        }
     }
 
     resetTimerMidSession = () => {
@@ -49,14 +54,18 @@ class Stopwatch extends React.Component {
         clearInterval(this.timer);
     };
     
-    componentDidUpdate(props, state) {
+    componentDidUpdate() {
         if (
-            props.gameStage === "gameVictory" &&
+            this.props.gameStage === "gameVictory" &&
             this.state.timerTime != 0
             ) {
             const gameVictoryTime = this.state.timerTime
             this.resetTimer()
-            props.reportTime( this.formatTime(gameVictoryTime))
+            this.props.reportTime( this.formatTime(gameVictoryTime))
+        }
+
+        if (this.props.gameStage === "countDownEnd") {
+            this.startStopwatch(this.props.gameStage)
         }
     }
 
@@ -87,7 +96,7 @@ class Stopwatch extends React.Component {
             </div>
             <div style={{display:"flex", justifyContent:"space-evenly" }}>
                 <div >
-                    <Button variant="outlined" color="primary" onClick={this.startTimer}>
+                    <Button variant="outlined" color="primary" onClick={this.startStopwatch}>
                         Start
                     </Button>
                 </div>            
