@@ -6,7 +6,8 @@ import Difficulty from '../components/Difficulty/Difficulty';
 import User from '../components/User/User';
 import HeaderMessage from '../components/HeaderMessage/HeaderMessage';
 import RightOrWrongBox from '../components/RightOrWrongBox/RightOrWrongBox';
-import Timer from '../components/Timer/Timer';
+import TimerStopwatch from '../components/TimerStopwatch/TimerStopwatch';
+import TimerCountdown from '../components/HeaderMessage/TimerCountdown/TimerCountdown';
 import "./App.css"
 import Container from '@material-ui/core/Container';
 
@@ -53,7 +54,6 @@ class App extends React.Component {
       case "gameVictory":
         console.log("gameVictory")
         this.vicotryColors()
-        console.log(this.state)
         break;
       default:
     }
@@ -95,21 +95,31 @@ class App extends React.Component {
   }
 
   clickHandler = (target, RGBColor) => {
-    if (target) {
-      if (this.state.round < 5) {
-        this.setState(
-          (prevState) => {
-            return { targetChoice:target, gameStage:"roundVictory", round: prevState.round + 1 }
-          }, this.appRouter
-        )
-      } else {
-          this.setState(
-            (prevState) => {
-              return { targetChoice:target, gameStage:"gameVictory", round: prevState.round + 1 }
-            }, this.appRouter
-          )
+    if (this.state.gameStage === "liveSession" ||
+        this.state.gameStage === "roundVictory" ||
+        this.state.gameStage === "gameVictory" ) {
+          if (target) {
+            if (this.state.round < 5) {
+              this.setState(
+                (prevState) => {
+                  return { targetChoice:target, gameStage:"roundVictory", round: prevState.round + 1 }
+                }, this.appRouter
+              )
+            } else {
+                this.setState(
+                  (prevState) => {
+                    return { targetChoice:target, gameStage:"gameVictory", round: prevState.round + 1 }
+                  }, this.appRouter
+                )
+              }
+          } else {
+            this.setState(
+              (prevState) => {
+                return { targetChoice:target }
+              }
+            )
+          }
         }
-    }
   }
 
   reportTime = (gameVictoryTime) => {
@@ -184,7 +194,7 @@ class App extends React.Component {
           <hr/>
           <div className="gridDifficultyTarget">
             <Difficulty changeDifficulty = { this.changeDifficulty } />
-            <HeaderMessage headerMessage = { headerMessage } />
+            <HeaderMessage headerMessage = { headerMessage } gameStage={ this.state.gameStage} />
           </div>
           <div className="flexBox">
             <div className="boxlistFlexWrapper">
@@ -192,7 +202,7 @@ class App extends React.Component {
             </div>
             <div className="timerRightOrWrongFlexWrapper">
               <div  className="timerAndRightOrWrongGridWrapper">
-                <div ><Timer resetTimer={this.resetTimer} startTimer={this.startTimer} reportTime={this.reportTime} gameStage={ this.state.gameStage } /></div>
+                <div ><TimerStopwatch resetTimer={this.resetTimer} startTimer={this.startTimer} reportTime={this.reportTime} gameStage={ this.state.gameStage } /></div>
                 <div style={{width:"80px", margin:"auto"}}><RightOrWrongBox targetChoice= {targetChoice} /></div>
               </div>
             </div>

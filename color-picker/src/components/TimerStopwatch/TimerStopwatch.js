@@ -3,7 +3,7 @@ import Stopwatch from "./Stopwatch/Stopwatch";
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 
-class Timer extends React.Component  {
+class TimerStopwatch extends React.Component  {
   constructor( props ){
     super(props);
   }
@@ -21,4 +21,4 @@ class Timer extends React.Component  {
   }
 }
 
-export default Timer;
+export default TimerStopwatch;

@@ -3,7 +3,7 @@ import RightOrWrongSymbol from '../RightOrWrongSymbol/RightOrWrongSymbol';
 import { faCheckCircle } from '@fortawesome/free-solid-svg-icons'
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons'
 
-const RightOrWrongBox = ({ind, RGBColor, targetChoice}) => {
+const RightOrWrongBox = ({targetChoice}) => {
     
     const styleCorrect = {
         color: {color:"rgb(28, 238, 74)"},
