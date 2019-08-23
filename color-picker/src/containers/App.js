@@ -28,7 +28,7 @@ class App extends React.Component {
         boxColors: new Array(3).fill({ color:rgbString(), target:false }),
         targetColor: null,
         targetChoice: null,
-        round:        1,
+        round:        1, 
         gameStage: "blank"   // blank, difficultySelectedPreStart, countDownStart, countDownMid, countDownEnd, liveSession, roundVictory, gameVictory
       }
   };
@@ -38,25 +38,17 @@ class App extends React.Component {
   appRouter = () => {
     switch(this.state.gameStage) {
       case ("difficultySelectedPreStart"):
-        console.log("difficultySelectedPreStart")
+        this.setState({round:1})
         this.anyColorYouLike(rgbString())
-        this.setState({ round:1 })
         break;
-      // case ("countDownStart"):
-      //     console.log("countDownStart")
-      //     this.setState({ round:1 })
-      //     break;
       case "liveSession":
-        console.log("liveSession")
         this.setState({headerMessage:this.state.targetColor})
         this.resetColors()
       break;
       case "roundVictory":
-        console.log("roundVictory")
         this.miniReset()
         break;
       case "gameVictory":
-        console.log("gameVictory")
         this.vicotryColors()
         break;
       default:
@@ -98,7 +90,6 @@ class App extends React.Component {
     }
 
     if (this.state.gameStage === "countDownEnd") {
-      console.log("ran")
       this.setState(
         (state) => {
           return {gameStage:"liveSession"}
@@ -209,7 +200,8 @@ class App extends React.Component {
   }
 
   render (){
-    const { headerMessage, boxColors, targetChoice } = this.state;
+    const { headerMessage, boxColors, targetChoice, nonLiveColor } = this.state;
+    // console.log(nonLiveColor)
     return (
       <div>
         <Container className="container" maxWidth="lg" >
@@ -221,7 +213,7 @@ class App extends React.Component {
           <hr/>
           <div className="gridDifficultyTarget">
             <Difficulty changeDifficulty = { this.changeDifficulty } />
-            <HeaderMessage headerMessage = { headerMessage } gameStage={ this.state.gameStage} />
+            <HeaderMessage nonLiveColor={nonLiveColor} startStopwatch={ this.startStopwatch } changeGameStage={ this.changeGameStage } headerMessage={ headerMessage } gameStage={ this.state.gameStage} />
           </div>
           <div className="flexBox">
             <div className="boxlistFlexWrapper">
@@ -233,9 +225,6 @@ class App extends React.Component {
                 <div style={{width:"80px", margin:"auto"}}><RightOrWrongBox targetChoice= {targetChoice} /></div>
               </div>
             </div>
-          </div>
-          <div>
-            <TimerCountdown startStopwatch={ this.startStopwatch } changeGameStage={ this.changeGameStage } gameStage={ this.state.gameStage } />
           </div>
           </Container>
       </div>

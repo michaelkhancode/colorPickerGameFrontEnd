@@ -7,12 +7,12 @@ import Typography from '@material-ui/core/Typography';
 class TimerCountdown extends React.Component {
   render() {
     return (
-      <div className="Timer">
-        <Paper elevation={5} square style={{width:"250px"}}>
+      <div style={this.props.style} className="Timer">
+        {/* <Paper elevation={5} square style={{width:"250px"}}> */}
             <Typography align="center" variant="h5" component="h3">
-              <Countdown changeGameStage={this.props.changeGameStage}  gameStage={ this.props.gameStage } />
+              <Countdown nonLiveColor={this.props.nonLiveColor} changeGameStage={this.props.changeGameStage}  gameStage={ this.props.gameStage } />
             </Typography>
-        </Paper>
+        {/* </Paper> */}
       </div>
     );
   }

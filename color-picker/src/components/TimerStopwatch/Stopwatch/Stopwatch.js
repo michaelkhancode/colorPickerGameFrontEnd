@@ -17,7 +17,6 @@ class Stopwatch extends React.Component {
         }
 
         if (this.props.gameStage === "countDownEnd") {
-            console.log(this.props.gameStage)
             const { timerTime } = this.state
             this.props.startStopwatch()
             this.setState({                                         
@@ -34,13 +33,14 @@ class Stopwatch extends React.Component {
         }
     }
 
+    // blank, difficultySelectedPreStart, countDownStart, countDownMid, countDownEnd, liveSession, roundVictory, gameVictory
+
     resetTimerMidSession = () => {
         if (
-            this.props.gameStage === "liveSession" ||
-            this.props.gameStage === "roundVictory" || 
-            this.props.gameStage === "gameVictory" 
+            this.props.gameStage !== "countDownStart" &&
+            this.props.gameStage !== "countDownMid"
              ) {
-            this.resetTimer()
+                this.resetTimer()
         }
     };
 
@@ -101,7 +101,7 @@ class Stopwatch extends React.Component {
                     </Button>
                 </div>            
                 <div >
-                    <Button variant="outlined" color="secondary" onClick={this.resetTimer}>
+                    <Button variant="outlined" color="secondary" onClick={this.resetTimerMidSession}>
                         Reset
                     </Button>
                 </div>

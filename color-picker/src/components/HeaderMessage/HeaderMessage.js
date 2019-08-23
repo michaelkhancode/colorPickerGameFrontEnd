@@ -11,26 +11,34 @@ const useStyles = makeStyles(theme => ({
     },
 }));
 
-const HeaderMessage = ({ changeGameStage, headerMessage, gameStage }) => {
+const HeaderMessage = ({ nonLiveColor, changeGameStage, headerMessage, gameStage, startStopwatch }) => {
     const classes = useStyles();
 
+    let timerDisplay;
+    let headerDisplay;
 
-// let x;
-// if (gameStage === "countDownStart" || 
-//     gameStage === "countDownMid") {
-//     x = <TimerCountdown changeGameStage={ changeGameStage }  gameStage={ gameStage } />
-// } else {
-//      x = <span> { `${headerMessage.toUpperCase()}` } </span>
-// }
+    // console.log(nonLiveColor)
+
+    switch (gameStage) {
+        case "countDownStart":
+        case "countDownMid":
+            timerDisplay={display:"block"};
+            headerDisplay={display:"none"};
+            break;
+        default:
+            timerDisplay={display:"none"};
+            headerDisplay={display:"block"};
+            break;
+    }
 
     return (
         <div style={{margin:"auto"}}>
             <Tilt className="Tilt" options={{ max : 25 }} >
                 <Paper style={{justifyContent:"center"}} className={classes.root}>
                     <Typography variant="h5" component="h1">
-                        
-                        {/* {x} */}
-                        <span> { `${headerMessage.toUpperCase()}` }</span>
+
+                        <TimerCountdown style={timerDisplay} startStopwatch={ startStopwatch } changeGameStage={ changeGameStage } gameStage={ gameStage } />
+                        <div style={headerDisplay}> { `${headerMessage.toUpperCase()}` }</div>
 
                     </Typography>
                 </Paper>
