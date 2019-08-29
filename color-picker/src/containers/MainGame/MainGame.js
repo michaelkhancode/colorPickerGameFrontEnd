@@ -29,7 +29,7 @@ class MainGame extends React.Component {
       }
   };
 
-  // make all thee callbacks to setState call appRouter, and app router will work off of gameStage
+  // make all thee callbacks in setState's call appRouter, and app router will work off of gameStage
 
   appRouter = () => {
     switch(this.state.gameStage) {
