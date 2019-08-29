@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
+import { Link } from "react-router-dom"
 
 const rgbString = () => {
     return `rgb(${Math.round(Math.random()*255)},${Math.round(Math.random()*255)},${Math.round(Math.random()*255)})`
@@ -82,7 +83,12 @@ class Signin extends React.Component {
                                 SignIn
                             </Button>
                             <p>
-                                Register
+                                <Link 
+                                to="/register"
+                                onClick= { () => clearInterval(this.timer) }
+                                >
+                                    Register
+                                </Link>
                             </p>
                         </div>
                     </form>

@@ -1,24 +1,20 @@
 import React from 'react';
-import Navigation from '../components/Navigation/Navigation';
-import Boxlist from '../components/Boxlist/Boxlist';
-import Score from '../components/Score/Score';
-import Difficulty from '../components/Difficulty/Difficulty';
-import User from '../components/User/User';
-import HeaderMessage from '../components/HeaderMessage/HeaderMessage';
-import RightOrWrongBox from '../components/RightOrWrongBox/RightOrWrongBox';
-import TimerStopwatch from '../components/TimerStopwatch/TimerStopwatch';
-import TimerCountdown from '../components/HeaderMessage/TimerCountdown/TimerCountdown';
-import "./App.css"
+import Navigation from '../../components/Navigation/Navigation';
+import Boxlist from '../../components/Boxlist/Boxlist';
+import Score from '../../components/Score/Score';
+import Difficulty from '../../components/Difficulty/Difficulty';
+import User from '../../components/User/User';
+import HeaderMessage from '../../components/HeaderMessage/HeaderMessage';
+import RightOrWrongBox from '../../components/RightOrWrongBox/RightOrWrongBox';
+import TimerStopwatch from '../../components/TimerStopwatch/TimerStopwatch';
+import "./MainGame.css"
 import Container from '@material-ui/core/Container';
 
 const rgbString = () => {
   return `rgb(${Math.round(Math.random()*255)},${Math.round(Math.random()*255)},${Math.round(Math.random()*255)})`
 };
 
-const intialBoxColor = rgbString();
-const intialBoxColorObject = {color:intialBoxColor, target:false}
-
-class App extends React.Component {
+class MainGame extends React.Component {
 
   constructor(props) {
     super(props);
@@ -232,4 +228,4 @@ class App extends React.Component {
   }
 };
 
-export default App;
+export default MainGame;
