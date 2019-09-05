@@ -11,20 +11,52 @@ const rgbString = () => {
 
 const body = document.querySelector("body");
 
+const urlServer = "http://localhost:3000/";
+
 class Signin extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            emailValue: ""
-            // passwordValue: ""
+            emailValue: "",
+            passwordValue: ""
         }
     }
 
+    validateEmail(email) {
+        var emailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+        return emailRegEx.test(String(email).toLowerCase());
+    }
+
+    validatePassword(password) {
+        var passwordRegEx = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{6,})"); // 1 lowercase, 1 uppercase, 1 numeric, at least 6 chars long
+        return passwordRegEx.test(String(password) );
+    }
+
+
     handleChange = (event) => {
-        this.setState({ emailValue:event.target.value })
+        switch (event.target.id) {
+            case "signin-email":
+                this.setState({ emailValue:event.target.value })
+                break;
+            case "signin-password":
+                this.setState({ passwordValue:event.target.value })   
+                break;
+            default:
+                break;
+        }
     }
 
     handleSubmit = (event) => {
+        
+        console.log(
+            "email pass-fail",
+            this.validateEmail(this.state.emailValue)
+        )
+
+        console.log(
+            "password pass-fail",
+            this.validatePassword(this.state.passwordValue)
+        )
         event.preventDefault();
     }
 
@@ -60,7 +92,7 @@ class Signin extends React.Component {
                             margin="normal"
                             id="signin-email"
                             label="Email"
-                            type="email"
+                            // type="email"
                             name="email"
                             value={this.state.emailValue}
                             onChange={ this.handleChange }
@@ -70,6 +102,8 @@ class Signin extends React.Component {
                             margin="normal"
                             id="signin-password"
                             label="Password"
+                            value={this.state.passwordValue}
+                            onChange={ this.handleChange }
                             type="password"
                             variant="outlined"
                         />
@@ -99,3 +133,31 @@ class Signin extends React.Component {
 } 
 
 export default Signin
+
+// fetch ("http://localhost:3000/imageface",{			
+// method:'post',
+// headers:{'Content-Type': 'application/json'},
+// body: JSON.stringify({
+//   input:this.state.input
+// })
+// })			
+// .then(response => response.json())					
+// .then( response => {
+// if (response){
+// fetch ("http://localhost:3000/image",{
+//     method:'put',
+//     headers:{'Content-Type': 'application/json'},
+//     body: JSON.stringify({
+//         id:this.state.user.id
+//     })
+// })
+// .then(data => data.json())
+// .then(user => {
+//   console.log(user)
+//   this.displayFaceBox(this.calculateFaceCoordinates(response));  
+//   this.updateUserState(user);
+// })
+// }
+// }) 
+// .catch( er => console.log(er) )
+// };
