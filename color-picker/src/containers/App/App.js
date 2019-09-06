@@ -21,7 +21,7 @@ const App = () => {
           <Route 
               exact 
               path="/maingame" 
-              render={(props) => <MainGame /> }
+              render={(props) => <MainGame props={props} /> }
           />
       </Switch>
     </Router >

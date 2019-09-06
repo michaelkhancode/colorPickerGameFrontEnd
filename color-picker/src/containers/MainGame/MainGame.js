@@ -1,7 +1,6 @@
 import React from 'react';
 import Navigation from '../../components/Navigation/Navigation';
 import Boxlist from '../../components/Boxlist/Boxlist';
-import Score from '../../components/Score/Score';
 import Difficulty from '../../components/Difficulty/Difficulty';
 import User from '../../components/User/User';
 import HeaderMessage from '../../components/HeaderMessage/HeaderMessage';
@@ -24,7 +23,8 @@ class MainGame extends React.Component {
         boxColors: new Array(3).fill({ color:rgbString(), target:false }),
         targetColor: null,
         targetChoice: null,
-        round:        1, 
+        round:        1,
+        user: this.props.props.location.state.user, 
         gameStage: "blank"   // blank, difficultySelectedPreStart, countDownStart, countDownMid, countDownEnd, liveSession, roundVictory, gameVictory
       }
   };
@@ -197,14 +197,14 @@ class MainGame extends React.Component {
 
   render (){
     const { headerMessage, boxColors, targetChoice, nonLiveColor } = this.state;
-    // console.log(nonLiveColor)
     return (
       <div>
         <Container className="container" maxWidth="lg" >
-          <div className="flexBox">
-            <Score />
-            <User />
-            <Navigation />
+          <div
+          style ={{display:"grid", gridTemplateColumns: "1fr 1fr 1fr"}} 
+          >
+            <User style={{gridColumn: 2}} name = {this.state.user.name} />
+            <Navigation  />
           </div> 
           <hr/>
           <div className="gridDifficultyTarget">

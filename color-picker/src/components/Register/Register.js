@@ -4,11 +4,15 @@ import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { Link } from "react-router-dom";
-import Alert from "./Alert"
+import Alert from "../Alert/Alert"
+import { Route, Redirect } from 'react-router'
+import MainGame from '../../containers/MainGame/MainGame'
 
 const rgbString = () => {
     return `rgb(${Math.round(Math.random()*255)},${Math.round(Math.random()*255)},${Math.round(Math.random()*255)})`
 };
+
+const urlServer = "http://localhost:3000/";
 
 const body = document.querySelector("body");
 
@@ -19,6 +23,7 @@ class Register extends React.Component {
             emailValue: "",
             usernameValue:"",
             passwordValue: "",
+            validRegistration:false,
             error:[]
         }
     }
@@ -77,14 +82,40 @@ class Register extends React.Component {
 
     handleSubmit = (event) => {
         const validationArray = this.registerValidator()
-        
+        event.preventDefault();
+
         if (validationArray.length >= 1 ) {
             this.setState({ error:validationArray })
             event.preventDefault();
         } else {
-            console.log("proper form submission")
+            fetch (`${urlServer}register`,{			
+                method:'post',
+                headers:{'Content-Type': 'application/json'},
+                body: JSON.stringify({
+                    email:this.state.emailValue,
+                    name:this.state.usernameValue,
+                    password:this.state.passwordValue
+                })
+            })			
+            .then(response => response.json())					
+            .then( response => { 
+                if (typeof(response) === "object") {
+                    clearInterval(this.timer)
+                    body.style.backgroundColor  = "white";
+                    this.setState ( 
+                        (state) => {
+                          return { user:response }
+                        }, () => {
+                            this.setState({validRegistration:true})
+                        }
+                    ) 
+                }else {
+                    let error = [response]
+                    this.setState( { error } )
+                    event.preventDefault();
+                }
+            })
         }
-        
     }
 
     componentDidMount() {
@@ -106,70 +137,85 @@ class Register extends React.Component {
         };
 
         return (
-            <div>
-                <Card style={{height:"auto", width:"400px", margin:"50px auto"}}> 
-                    <CardContent>
-                        <form 
-                            style={flexContainer}
-                            onSubmit={this.handleSubmit}
-                        >
-                            <h1 id="title" style={{margin:"auto"}}>
-                                RGB Color Game
-                            </h1>
-                            <TextField
-                                margin="normal"
-                                id="Register-username"
-                                label="Username"
-                                name="Username"
-                                variant="outlined"
-                                value={this.state.usernameValue}
-                                onChange={ this.handleChange }
-                            />
-                            <TextField
-                                margin="normal"
-                                id="Register-email"
-                                label="Email"
-                                type="email"
-                                name="email"
-                                variant="outlined"
-                                value={this.state.emailValue}
-                                onChange={ this.handleChange }
-                            />
-                            <TextField
-                                margin="normal"
-                                id="Register-password"
-                                label="Password"
-                                type="password"
-                                variant="outlined"
-                                value={this.state.passwordValue}
-                                onChange={ this.handleChange }
-                            />
-                            <div style={{display:"flex", justifyContent:"space-evenly", marginTop:"10px"}}>
-                                <Button
-                                    style={{width:"100px"}}
-                                    variant="outlined" 
-                                    color="inherit"
-                                    type="submit"
-                                    onClick={this.handleClick}
+            <Route exact path="/register" render={() => (
+                this.state.validRegistration ? 
+                (
+                    <Redirect 
+                        to={{
+                            pathname: "/maingame",
+                            state: { user: this.state.user }
+                        }}
+                    />
+                ) 
+                : 
+                (
+                    <div>
+                        <Card style={{height:"auto", width:"400px", margin:"50px auto"}}> 
+                            <CardContent>
+                                <form 
+                                    style={flexContainer}
+                                    onSubmit={this.handleSubmit}
                                 >
-                                    Register
-                                </Button>
-                                <p>
-                                    <Link 
-                                    to="/"
-                                    onClick= { () => clearInterval(this.timer) }
-                                    >
-                                        SignIn
-                                    </Link>
-                                </p>
-                            </div>
-                        </form>
-                    </CardContent>
-                </Card>
-                <Alert error={this.state.error} />
-            </div>
+                                    <h1 id="title" style={{margin:"auto"}}>
+                                        RGB Color Game
+                                    </h1>
+                                    <TextField
+                                        margin="normal"
+                                        id="Register-username"
+                                        label="Username"
+                                        name="Username"
+                                        variant="outlined"
+                                        value={this.state.usernameValue}
+                                        onChange={ this.handleChange }
+                                    />
+                                    <TextField
+                                        margin="normal"
+                                        id="Register-email"
+                                        label="Email"
+                                        type="email"
+                                        name="email"
+                                        variant="outlined"
+                                        value={this.state.emailValue}
+                                        onChange={ this.handleChange }
+                                    />
+                                    <TextField
+                                        margin="normal"
+                                        id="Register-password"
+                                        label="Password"
+                                        type="password"
+                                        variant="outlined"
+                                        value={this.state.passwordValue}
+                                        onChange={ this.handleChange }
+                                    />
+                                    <div style={{display:"flex", justifyContent:"space-evenly", marginTop:"10px"}}>
+                                        <Button
+                                            style={{width:"100px"}}
+                                            variant="outlined" 
+                                            color="inherit"
+                                            type="submit"
+                                            onClick={this.handleClick}
+                                        >
+                                            Register
+                                        </Button>
+                                        <p>
+                                            <Link 
+                                            to="/"
+                                            onClick= { () => clearInterval(this.timer) }
+                                            >
+                                                SignIn
+                                            </Link>
+                                        </p>
+                                    </div>
+                                </form>
+                            </CardContent>
+                        </Card>
+                        <Alert error={this.state.error} />
+                    </div>
+        ))}
+            />
         );
     }
 } 
 
 export default Register;
+
