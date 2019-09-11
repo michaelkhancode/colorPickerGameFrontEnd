@@ -39,7 +39,7 @@ class App extends React.Component {
           componentToRender = <Signin changePath={this.changePath} validLogIn= {this.validLogIn} />;
           break;
         case "/maingame":
-          componentToRender = <MainGame changePath={this.changePath} user={this.state.user} />;
+          componentToRender = <MainGame changePath={this.changePath} user={this.state.user} newUser={this.newUser} />;
           break;
         case "/profile":
             componentToRender = <Profile changePath={this.changePath} user={this.state.user} />;

@@ -14,6 +14,23 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
+const formatTime = (timeInMs) => {
+  let hours = (
+      "0" + 
+      Math.floor(timeInMs / 3600000) // total time in hours 
+      ).slice(-2)                     // only take the last 2 numbers
+  let minutes = (
+      "0" +
+      (
+          Math.floor(timeInMs / 60000) // total time in minutes
+          % 60                          // divide the hours, take the remaining minutes
+      )).slice(-2);                     // only take the last 2 numbers
+  // same idea for below, we get hours, minutes, seconds, centiseconds, to 2 points percision
+  let seconds = ("0" + (Math.floor(timeInMs / 1000) % 60)).slice(-2);
+  let centiseconds = ("0" + (Math.floor(timeInMs / 10) % 100)).slice(-2);
+  return {hours, minutes, seconds, centiseconds};
+}
+
 const Profile = ( props ) => {
 
     console.log(props)
@@ -35,11 +52,14 @@ const Profile = ( props ) => {
             return { name, time };
           }
           
+          let time3 = formatTime(props.user.toptime3);
+          let time6 = formatTime(props.user.toptime6);
+          let time9 = formatTime(props.user.toptime9);
 
           const rows = [
-            createData('3', (props.user.toptime3 == null) ? "N/A":props.user.toptime3),
-            createData('6', (props.user.toptime3 == null) ? "N/A":props.user.toptime6),
-            createData('9', (props.user.toptime3 == null) ? "N/A":props.user.toptime9)
+            createData('3', (props.user.toptime3 == null) ? "N/A": `${time3.minutes}:${time3.seconds}:${time3.centiseconds}` ),
+            createData('6', (props.user.toptime6 == null) ? "N/A": `${time6.minutes}:${time6.seconds}:${time6.centiseconds}` ),
+            createData('9', (props.user.toptime9 == null) ? "N/A": `${time9.minutes}:${time9.seconds}:${time9.centiseconds}` )
           ];
           
         const classes = useTableStyles();

@@ -156,13 +156,17 @@ class MainGame extends React.Component {
         })
       })			
       .then(response => response.json())					
-      .then( response => { 
-        this.setState({ user:response, path:"/maingame" })
+      .then( response => {
+        
+        let user = response
+        // console.log(user)
+        // this.setState({ user, path:"/maingame" })
+        this.props.newUser(user);
+
       })
     }
 
-    // alert( gameVictoryTimeMS )
-    // alert(`${gameVictoryTime.hours} : ${gameVictoryTime.minutes} : ${gameVictoryTime.seconds} : ${gameVictoryTime.centiseconds}`)
+    alert(`${gameVictoryTime.hours} : ${gameVictoryTime.minutes} : ${gameVictoryTime.seconds} : ${gameVictoryTime.centiseconds}`)
   }
 
   resetTargetColor = (callback) => {

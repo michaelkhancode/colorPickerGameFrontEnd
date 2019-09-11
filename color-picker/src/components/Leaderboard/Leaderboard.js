@@ -18,6 +18,23 @@ const urlServer = "http://localhost:3000/";
     return { name, time };
   }
 
+  const formatTime = (timeInMs) => {
+    let hours = (
+        "0" + 
+        Math.floor(timeInMs / 3600000) // total time in hours 
+        ).slice(-2)                     // only take the last 2 numbers
+    let minutes = (
+        "0" +
+        (
+            Math.floor(timeInMs / 60000) // total time in minutes
+            % 60                          // divide the hours, take the remaining minutes
+        )).slice(-2);                     // only take the last 2 numbers
+    // same idea for below, we get hours, minutes, seconds, centiseconds, to 2 points percision
+    let seconds = ("0" + (Math.floor(timeInMs / 1000) % 60)).slice(-2);
+    let centiseconds = ("0" + (Math.floor(timeInMs / 10) % 100)).slice(-2);
+    return {hours, minutes, seconds, centiseconds};
+  }
+
 class LeaderBoard extends React.Component {
     constructor(props) {
         super(props);
@@ -34,10 +51,15 @@ class LeaderBoard extends React.Component {
         fetch (`${urlServer}leaderboard`)
         .then(response => response.json())
         .then(response => {
+
+            let time3 = formatTime(response[0].toptime3);
+            let time6 = formatTime(response[1].toptime6);
+            let time9 = formatTime(response[2].toptime9);
+
             let rows = [
-                createData('3', `${response[0].name.toUpperCase()} ${response[0].toptime3}`),
-                createData('6', `${response[1].name.toUpperCase()}: ${response[1].toptime6}`),
-                createData('9', `${response[2].name.toUpperCase()}: ${response[2].toptime9}`)
+                createData('3', `${response[0].name.toUpperCase()}: ${time3.minutes}:${time3.seconds}:${time3.centiseconds}`),
+                createData('6', `${response[1].name.toUpperCase()}: ${time6.minutes}:${time6.seconds}:${time6.centiseconds}`),
+                createData('9', `${response[2].name.toUpperCase()}: ${time9.minutes}:${time9.seconds}:${time9.centiseconds}`)
             ]
             this.setState({ rows })
         })			
