@@ -3,9 +3,7 @@ import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-import { Link } from "react-router-dom";
 import Alert from "../Alert/Alert"
-import { Route, Redirect } from 'react-router'
 import MainGame from '../../containers/MainGame/MainGame'
 
 const rgbString = () => {
@@ -102,13 +100,14 @@ class Register extends React.Component {
                 if (typeof(response) === "object") {
                     clearInterval(this.timer)
                     body.style.backgroundColor  = "white";
-                    this.setState ( 
-                        (state) => {
-                          return { user:response }
-                        }, () => {
-                            this.setState({validRegistration:true})
-                        }
-                    ) 
+                    this.props.newUser(response)
+                    // this.setState ( 
+                    //     (state) => {
+                    //       return { user:response }
+                    //     }, () => {
+                    //         this.setState({validRegistration:true})
+                    //     }
+                    // ) 
                 }else {
                     let error = [response]
                     this.setState( { error } )
@@ -137,18 +136,6 @@ class Register extends React.Component {
         };
 
         return (
-            <Route exact path="/register" render={() => (
-                this.state.validRegistration ? 
-                (
-                    <Redirect 
-                        to={{
-                            pathname: "/maingame",
-                            state: { user: this.state.user }
-                        }}
-                    />
-                ) 
-                : 
-                (
                     <div>
                         <Card style={{height:"auto", width:"400px", margin:"50px auto"}}> 
                             <CardContent>
@@ -197,13 +184,13 @@ class Register extends React.Component {
                                         >
                                             Register
                                         </Button>
-                                        <p>
-                                            <Link 
-                                            to="/"
-                                            onClick= { () => clearInterval(this.timer) }
+                                        <p style={{cursor:"pointer"}}
+                                            onClick= { () =>{
+                                                clearInterval(this.timer)
+                                                this.props.changePath("/") 
+                                            }}
                                             >
                                                 SignIn
-                                            </Link>
                                         </p>
                                     </div>
                                 </form>
@@ -211,8 +198,6 @@ class Register extends React.Component {
                         </Card>
                         <Alert error={this.state.error} />
                     </div>
-        ))}
-            />
         );
     }
 } 

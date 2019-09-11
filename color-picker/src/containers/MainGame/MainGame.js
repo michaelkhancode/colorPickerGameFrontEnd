@@ -13,6 +13,8 @@ const rgbString = () => {
   return `rgb(${Math.round(Math.random()*255)},${Math.round(Math.random()*255)},${Math.round(Math.random()*255)})`
 };
 
+const urlServer = "http://localhost:3000/";
+
 class MainGame extends React.Component {
 
   constructor(props) {
@@ -24,7 +26,7 @@ class MainGame extends React.Component {
         targetColor: null,
         targetChoice: null,
         round:        1,
-        user: this.props.props.location.state.user, 
+        user: this.props.user, 
         gameStage: "blank"   // blank, difficultySelectedPreStart, countDownStart, countDownMid, countDownEnd, liveSession, roundVictory, gameVictory
       }
   };
@@ -136,8 +138,31 @@ class MainGame extends React.Component {
         }
   }
 
-  reportTime = (gameVictoryTime) => {
-    alert(`${gameVictoryTime.hours} : ${gameVictoryTime.minutes} : ${gameVictoryTime.seconds} : ${gameVictoryTime.centiseconds}`)
+  reportTime = (gameVictoryTime, gameVictoryTimeMS) => {
+
+    if 
+    (
+      (this.state.user[`toptime${this.state.difficulty}`] === null) ||
+      (this.state.user[`toptime${this.state.difficulty}`] > gameVictoryTimeMS)
+    ){
+      fetch (`${urlServer}profile`,{			
+        method:'put',
+        headers:{'Content-Type': 'application/json'},
+        body: JSON.stringify(
+          {
+          ...this.state.user,
+          difficulty: this.state.difficulty,
+          score:gameVictoryTimeMS
+        })
+      })			
+      .then(response => response.json())					
+      .then( response => { 
+        this.setState({ user:response, path:"/maingame" })
+      })
+    }
+
+    // alert( gameVictoryTimeMS )
+    // alert(`${gameVictoryTime.hours} : ${gameVictoryTime.minutes} : ${gameVictoryTime.seconds} : ${gameVictoryTime.centiseconds}`)
   }
 
   resetTargetColor = (callback) => {
@@ -196,6 +221,7 @@ class MainGame extends React.Component {
   }
 
   render (){
+    console.log(this.props)
     const { headerMessage, boxColors, targetChoice, nonLiveColor } = this.state;
     return (
       <div>
@@ -204,7 +230,7 @@ class MainGame extends React.Component {
           style ={{display:"grid", gridTemplateColumns: "1fr 1fr 1fr"}} 
           >
             <User style={{gridColumn: 2}} name = {this.state.user.name} />
-            <Navigation  />
+            <Navigation changePath={this.props.changePath} />
           </div> 
           <hr/>
           <div className="gridDifficultyTarget">

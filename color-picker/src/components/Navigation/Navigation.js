@@ -2,20 +2,35 @@ import React from 'react';
 import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
-import Alert from "../Alert/Alert"
-import { Link } from "react-router-dom"
+// import Alert from "../Alert/Alert"
+import Profile from '../Profile/Profile';
 
-const Navigation = () => {
+const Navigation = (props) => {
     const [anchorEl, setAnchorEl] = React.useState(null);
   
     function handleClick(event) {
       setAnchorEl(event.currentTarget);
     }
   
-    function handleClose() {
+    function handleClose(event) {
+      switch (event.target.id) {
+        case "leaderboard":
+          props.changePath("/leaderboard")
+          break;
+        case "profile":
+          props.changePath("/profile")
+          break;
+        case "logout":
+          props.changePath("/")
+          break;
+        default:
+          break;
+      }
       setAnchorEl(null);
     }
-  
+
+    console.log(props)
+
     return (
     <nav style={{marginLeft:"auto", gridColumn: 3 }}> 
         <div>
@@ -33,18 +48,18 @@ const Navigation = () => {
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
             >
-            <MenuItem onClick={handleClose}>
-              <Link to="/" style={{textDecoration:"none", color:"black"}}>Profile</Link>  
+
+            <MenuItem id="leaderboard" onClick={handleClose}>
+                Leader Board
             </MenuItem>
 
-            <MenuItem onClick={handleClose}>
-              <Link to="/" style={{textDecoration:"none", color:"black"}}>Leader Board</Link> 
+            <MenuItem id="profile" onClick={handleClose}>
+                Profile
             </MenuItem>
 
-            <MenuItem onClick={handleClose}>
-              <Link to="/" style={{textDecoration:"none", color:"black"}}>Logout</Link>
+            <MenuItem id="logout" onClick={handleClose}>
+                Logout
             </MenuItem>
-
             </Menu>
         </div>
     </nav>
@@ -53,3 +68,51 @@ const Navigation = () => {
   }
 
 export default Navigation;
+
+{/* 
+  <MenuItem onClick={handleClose}>
+<Link 
+style={{textDecoration:"none", color:"black"}} 
+to={{
+  pathname: "/profile",
+  state: { user: props.user }
+}}
+>
+  Profile
+</Link>  
+</MenuItem>
+
+<MenuItem onClick={handleClose}>
+<Link 
+style={{textDecoration:"none", color:"black"}} 
+to={{
+  pathname: "/leaderboard",
+}}
+>
+  Leader Board
+</Link> 
+</MenuItem>
+
+<MenuItem onClick={handleClose}>
+<Link 
+style={{textDecoration:"none", color:"black"}} 
+to="/"
+>
+  Logout
+</Link>
+</MenuItem> 
+*/}
+
+// var to;
+//maingame:     Leaderboard, Profile Logout
+
+//[{pathname:"/leaderboard", text:"Leader Board"}, {pathname:"/profile", state: { user: props.user }, text:"Profile"}, {pathname:"/", text:"Logout"}] 
+
+//profile:      Play Game, Leaderboard, Logout
+
+//leaderboard:  Play Game, Profile, Logout
+
+
+
+
+

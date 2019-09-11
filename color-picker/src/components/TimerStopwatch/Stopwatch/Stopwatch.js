@@ -61,7 +61,7 @@ class Stopwatch extends React.Component {
             ) {
             const gameVictoryTime = this.state.timerTime
             this.resetTimer()
-            this.props.reportTime( this.formatTime(gameVictoryTime))
+            this.props.reportTime( this.formatTime(gameVictoryTime), gameVictoryTime)
         }
 
         if (this.props.gameStage === "countDownEnd") {
