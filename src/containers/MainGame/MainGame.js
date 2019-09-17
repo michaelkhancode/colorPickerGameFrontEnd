@@ -13,7 +13,7 @@ const rgbString = () => {
   return `rgb(${Math.round(Math.random()*255)},${Math.round(Math.random()*255)},${Math.round(Math.random()*255)})`
 };
 
-const urlServer = "http://localhost:3000/";
+const urlServer = "https://afternoon-savannah-78570.herokuapp.com/";
 
 class MainGame extends React.Component {
 

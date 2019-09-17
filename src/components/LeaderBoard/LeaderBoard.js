@@ -12,7 +12,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 
-const urlServer = "http://localhost:3000/";
+const urlServer = "https://afternoon-savannah-78570.herokuapp.com/";
 
   function createData(name, time) {
     return { name, time };
